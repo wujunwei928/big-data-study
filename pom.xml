@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--定义项目maven坐标-->
+    <groupId>net.wujunwei.study</groupId>
+    <artifactId>big-data-study</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+
+    <!--定义相关属性-->
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--定义一个名字叫 hadoop.version 的属性, 可以用${hadoop.version}获取属性的值-->
+        <hadoop.version>2.7.1</hadoop.version>
+        <scala.version>2.10</scala.version>
+        <spark.version>1.6.1</spark.version>
+    </properties>
+
+
+    <!--定义maven依赖-->
+    <dependencies>
+
+
+
+
+
+
+        <!--
+        dependency 中 scope 属性 的 取值范围:
+
+        compile
+        默认的scope，表示 dependency 都可以在生命周期中使用。
+        而且，这些dependencies 会传递到依赖的项目中。适用于所有阶段，会随着项目一起发布
+
+        provided
+        跟compile相似，但是表明了dependency 由JDK或者容器提供，例如Servlet AP和一些Java EE APIs。
+        这个scope 只能作用在编译和测试时，同时没有传递性。
+
+        runtime
+        表示dependency不作用在编译时，但会作用在运行和测试时，如JDBC驱动，适用运行和测试阶段。
+
+        test
+        表示dependency作用在测试时，不作用在运行时。
+        测试范围依赖是一个只在测试编译和测试运行时在 classpath 中有效的依赖。
+        不会随项目发布。
+
+        system
+        跟provided 相似，但是在系统中要以外部JAR包的形式提供，maven不会在repository查找它。
+        注意该范围是不推荐使用的（你应该一直尽量去从公共 或 定制的 Maven 仓库中引用依赖）
+        -->
+        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                    <archive>
+                        <manifest>
+                            <mainClass>Spark</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
