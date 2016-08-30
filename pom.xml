@@ -4,95 +4,162 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+
     <!--定义项目maven坐标-->
     <groupId>net.wujunwei.study</groupId>
     <artifactId>big-data-study</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <!--如果一个pom.xml需要被继承, 那么其打包方式需要是pom-->
+    <packaging>pom</packaging>
+
+
+    <!--定义相关模块-->
+    <modules>
+        <module>spark</module>
+    </modules>
 
 
     <!--定义相关属性-->
     <properties>
+        <!--假设定义一个名字叫 hadoop.version 的属性, 可以用${hadoop.version}获取属性的值-->
+        <!--可以在这里统一定义相关依赖的版本号, 在下面用dependency标签定义依赖的时候使用-->
+
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!--定义一个名字叫 hadoop.version 的属性, 可以用${hadoop.version}获取属性的值-->
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+
+
+        <!--大数据相关-->
         <hadoop.version>2.7.1</hadoop.version>
+        <yarn.version>${hadoop.version}</yarn.version>
         <scala.version>2.10</scala.version>
+        <scala.binary.version>2.11</scala.binary.version>
         <spark.version>1.6.1</spark.version>
+        <hbase.version>1.0.1.1</hbase.version>
+        <flume.version>1.6.0</flume.version>
+        <zookeeper.version>3.4.5</zookeeper.version>
+        <libthrift.version>0.9.2</libthrift.version>
+
+        <!--web开发相关-->
+        <jetty.version>9.2.16.v20160414</jetty.version>
+        <javax.servlet.version>3.1.0</javax.servlet.version>
+
+        <!--工具类-->
+        <slf4j.version>1.7.16</slf4j.version>
+        <log4j.version>1.2.17</log4j.version>
+        <codehaus.jackson.version>1.9.13</codehaus.jackson.version>
+        <fasterxml.jackson.version>2.6.5</fasterxml.jackson.version>
+        <joda.version>2.9.3</joda.version>
+        <jodd.version>3.5.2</jodd.version>
+
+        <!--测试相关-->
+        <junit.version>4.12</junit.version>
+
     </properties>
 
 
     <!--定义maven依赖-->
-    <dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <!--
+            dependency 中 scope 属性 的 取值范围:
 
+            compile
+            默认的scope，表示 dependency 都可以在生命周期中使用。
+            而且，这些dependencies 会传递到依赖的项目中。适用于所有阶段，会随着项目一起发布
 
+            provided
+            跟compile相似，但是表明了dependency 由JDK或者容器提供，例如Servlet AP和一些Java EE APIs。
+            这个scope 只能作用在编译和测试时，同时没有传递性。
 
+            runtime
+            表示dependency不作用在编译时，但会作用在运行和测试时，如JDBC驱动，适用运行和测试阶段。
 
+            test
+            表示dependency作用在测试时，不作用在运行时。
+            测试范围依赖是一个只在测试编译和测试运行时在 classpath 中有效的依赖。
+            不会随项目发布。
 
+            system
+            跟provided 相似，但是在系统中要以外部JAR包的形式提供，maven不会在repository查找它。
+            注意该范围是不推荐使用的（你应该一直尽量去从公共 或 定制的 Maven 仓库中引用依赖）
+            -->
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>${javax.servlet.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
+            </dependency>
 
-        <!--
-        dependency 中 scope 属性 的 取值范围:
+            <!--spark-->
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-core_${scala.binary.version}</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-sql_${scala.binary.version}</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-hive_${scala.binary.version}</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-mllib_${scala.binary.version}</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-streaming-kafka_${scala.binary.version}</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-streaming-flume_${scala.binary.version}</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.spark</groupId>
+                <artifactId>spark-streaming-flume-sink_${scala.binary.version}</artifactId>
+                <version>${spark.version}</version>
+            </dependency>
 
-        compile
-        默认的scope，表示 dependency 都可以在生命周期中使用。
-        而且，这些dependencies 会传递到依赖的项目中。适用于所有阶段，会随着项目一起发布
+            <!-- hadoop  -->
+            <dependency>
+                <groupId>org.apache.hadoop</groupId>
+                <artifactId>hadoop-client</artifactId>
+                <version>${hadoop.version}</version>
+            </dependency>
 
-        provided
-        跟compile相似，但是表明了dependency 由JDK或者容器提供，例如Servlet AP和一些Java EE APIs。
-        这个scope 只能作用在编译和测试时，同时没有传递性。
+            <!-- HBase -->
+            <dependency>
+                <groupId>org.apache.hbase</groupId>
+                <artifactId>hbase-client</artifactId>
+                <version>${hbase.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.hbase</groupId>
+                <artifactId>hbase-server</artifactId>
+                <version>${hbase.version}</version>
+            </dependency>
 
-        runtime
-        表示dependency不作用在编译时，但会作用在运行和测试时，如JDBC驱动，适用运行和测试阶段。
+        </dependencies>
+    </dependencyManagement>
 
-        test
-        表示dependency作用在测试时，不作用在运行时。
-        测试范围依赖是一个只在测试编译和测试运行时在 classpath 中有效的依赖。
-        不会随项目发布。
-
-        system
-        跟provided 相似，但是在系统中要以外部JAR包的形式提供，maven不会在repository查找它。
-        注意该范围是不推荐使用的（你应该一直尽量去从公共 或 定制的 Maven 仓库中引用依赖）
-        -->
-        <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.6</version>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>Spark</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
