@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--pom继承-->
+    <parent>
+        <artifactId>big-data-study</artifactId>
+        <groupId>net.wujunwei.study</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <!--所继承的pom.xml的地址-->
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>spark</artifactId>
+
+
+    <properties>
+        <!--运行spark程序的shell脚本名称-->
+        <shellScriptName>Spark.sh</shellScriptName>
+
+        <!--main class 的 package 名称-->
+        <mainClass.JavaPackageName>net.wujunwei.spark</mainClass.JavaPackageName>
+
+        <!--main class 的 类名称-->
+        <mainClass.JavaClassName>SparkSqlToRedis</mainClass.JavaClassName>
+
+        <!--main class 的 全名称-->
+        <mainClassName>${mainClass.JavaPackageName}.${mainClass.JavaClassName}</mainClassName>
+    </properties>
+
+
+    <!--继承pom.xml的时候, 依赖不需要配置version, 否则会覆盖父pom.xml的配置, 造成依赖冲突-->
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-core_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-hive_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-mllib_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-kafka_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-flume_${scala.binary.version}</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-streaming-flume-sink_${scala.binary.version}</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!-- 告知 maven-jar-plugin添加一个 Class-Path元素到 MANIFEST.MF文件，以及在Class-Path元素中包括所有依赖项 -->
+                            <addClasspath>true</addClasspath>
+                            <!-- 所有的依赖项应该位于 lib文件夹 -->
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <!-- 当用户使用 lib命令执行JAR文件时，使用该元素定义将要执行的类名 -->
+                            <mainClass>${mainClassName}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.5.3</version>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>${mainClassName}</mainClass>
+                                </manifest>
+                            </archive>
+
+                            <!--自定义assembly包的名称-->
+                            <finalName>${mainClass.JavaClassName}</finalName>
+                            <!--assembly包名称默认自带一个 -package 后缀, 设置为false后不带这个后缀-->
+                            <appendAssemblyId>false</appendAssemblyId>
+
+
+                            <!--<descriptorRefs>-->
+                            <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                            <!--</descriptorRefs>-->
+
+                            <descriptors>
+                                <descriptor>src/main/resources/assembly/assembly.xml</descriptor>
+                            </descriptors>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>
