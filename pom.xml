@@ -51,6 +51,7 @@
         <fasterxml.jackson.version>2.6.5</fasterxml.jackson.version>
         <joda.version>2.9.3</joda.version>
         <jodd.version>3.5.2</jodd.version>
+        <jedis.version>2.8.1</jedis.version>
 
         <!--测试相关-->
         <junit.version>4.12</junit.version>
@@ -156,6 +157,13 @@
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-server</artifactId>
                 <version>${hbase.version}</version>
+            </dependency>
+
+            <!--jedis redis操作-->
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
             </dependency>
 
         </dependencies>

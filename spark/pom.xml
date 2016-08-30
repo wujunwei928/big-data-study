@@ -33,6 +33,7 @@
 
     <!--继承pom.xml的时候, 依赖不需要配置version, 否则会覆盖父pom.xml的配置, 造成依赖冲突-->
     <dependencies>
+        <!--spark-->
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.binary.version}</artifactId>
@@ -64,6 +65,12 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-flume-sink_${scala.binary.version}</artifactId>
+        </dependency>
+
+        <!--jedis redis operate-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
         </dependency>
     </dependencies>
 
