@@ -41,7 +41,7 @@ public class SparkSqlToRedis {
      * spark sql 测试
      */
     public static void sparkSqlTest() {
-        SparkConf conf=new SparkConf().setAppName("Spark-Hive-To-Redis").setMaster("local");
+        SparkConf conf=new SparkConf().setMaster("local").setAppName("Spark-Hive-To-Redis");
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         SQLContext sqlContext = new org.apache.spark.sql.hive.HiveContext(sc);
