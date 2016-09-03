@@ -13,7 +13,7 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 public class SparkSqlToRedis {
     public static void main(String[] args) {
-        System.out.println("hello");
+        sparkSqlTest();
     }
 
     /**
@@ -45,6 +45,6 @@ public class SparkSqlToRedis {
         JavaSparkContext sc = new JavaSparkContext(conf);
 
         SQLContext sqlContext = new org.apache.spark.sql.hive.HiveContext(sc);
-        DataFrame df = sqlContext.sql("SELECT * FROM table");
+        DataFrame df = sqlContext.sql("SELECT * FROM employee");
     }
 }

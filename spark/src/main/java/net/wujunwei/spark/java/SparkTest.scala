@@ -1,3 +1,6 @@
+package net.wujunwei.spark.java
+
+import org.apache.spark.{SparkConf, SparkContext}
 
 
 /**
@@ -11,8 +14,8 @@ object SparkTest {
 
     val sc = new SparkContext(conf)
 
-    val lines = sc.textFile("~/test.log")
-    val pythonLines = lines.filter(lambda line: "Python" in line)
+    val lines = sc.textFile("/data/spark/README.md")
+    val pythonLines = lines.filter(line => line.contains("Python"))
     println("----output----------------------")
     println(pythonLines.first())
 
