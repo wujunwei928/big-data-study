@@ -14,19 +14,24 @@ object SparkTest {
 
   def main(args: Array[String]) {
 
-    val conf = new SparkConf().setMaster("local").setAppName("Test Load Model")
+//    val conf = new SparkConf().setMaster("local").setAppName("Test Load Model")
+//
+//    val sc = new SparkContext(conf)
 
-    val sc = new SparkContext(conf)
+//    val lines = sc.textFile("D:/a.txt")
+//    case calss MyTopic(id: Long, name: Long)
 
-    val lines = sc.textFile("D:/a.txt")
+    case class MyTopic(id: Long, name: String)
+    case class MyTopicForm(topics: List[MyTopic], topic_count: Int)
 
-    case calss myTopic
+    val myTopics = List(MyTopic(1781, "文具"),MyTopic(1782,"电脑"))
+    val myTopicForm = MyTopicForm(myTopics, 2)
 
-
-
+    val json = ("topics" -> 1) ~ ("topic_count" -> 3)
 
 
     println(compact(render(json)))
+
 
   }
 
