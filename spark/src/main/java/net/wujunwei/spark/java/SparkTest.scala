@@ -10,7 +10,13 @@ import org.json4s.DefaultFormats
 
 
 /**
-  * Created by liushilin on 2016/3/15.
+  * spark读取文件，将文件信息汇总成json，然后存入redis
+  *
+  * @author Wujunwei
+  * @email  1399952803@qq.com
+  * @github https://github.com/wujunwei928
+  * @blog   http://www.wujunwei.net
+  *
   */
 object SparkTest {
 
