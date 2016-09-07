@@ -17,89 +17,48 @@ object SparkTest {
   def main(args: Array[String]) {
 
     val conf = new SparkConf().setMaster("local").setAppName("mapConvertJsonToRedis")
-//
+
     val sc = new SparkContext(conf)
 
     val data = sc.textFile("/home/wujunwei/study/a.txt")
 
     val tmpData1 = data.map(line => line.split(1.toChar.toString))
 
+    //通过取唯一值，获取可能出现的topic_form
+    //注意这里一定要先用collect取到一个数组，下面再用foreach循环，否则RDD循环嵌套会报错
     val topic_form_list = tmpData1.map(line=>line(0)).distinct.collect()
 
-    case class My_Topic(id: String, name: String)
+    //设置一个class，用来存储topic
+    case class My_Topic(id: Long, name: String)
 
-    var jsonMap:Map[String,Any] = Map()
+    //拼接生成json的map
+    var jsonMap:Map[String,Any] = Map()    //定义一个空的map
     topic_form_list.foreach(topic_form => {
+      //根据topic_form过滤后，将相同topic_form的topic汇总在一起
       val tmpTopics = tmpData1.filter(line => line(0) == topic_form).map(
-        line => My_Topic(line(2), line(1))
+        line => My_Topic(line(2).toLong, line(1))
       ).collect()
 
+      //map拼接新元素
       jsonMap += ("topic_form_" + topic_form ->
         Map("topics" -> tmpTopics, "topicCount" -> tmpTopics.length))
     })
 
-    val json = Map(
-      "topic_form_0" -> Map(
-        "topics" -> List(
-          Map("id" -> 1781, "name" -> "wenju") ,
-          Map("id" -> 1781, "name" -> "wenju")
-        ),
-        "count" -> 2
-      ),
-      "topic_form_1" -> Map(
-        "topics" -> List(
-          Map("id" -> "1781", "name" -> "wenju") ,
-          Map("id" -> "1781", "name" -> "wenju")
-        ),
-        "count" -> 2
-      )
-    )
+    //将Map生成json
+    val json = Json(DefaultFormats).write(jsonMap)
+//    println(json)
 
-    println(Json(DefaultFormats).write(jsonMap))
-//    println(compact(render(json)))
-
-
-  }
-
-  def test(): Unit = {
-    case class Winner(id: Long, numbers: List[Int])
-    case class Lotto(id: Long, winningNumbers: List[Int], winners: List[Winner], drawDate: Option[java.util.Date])
-
-    val winners = List(Winner(23, List(2, 45, 34, 23, 3, 5)), Winner(54, List(52, 3, 12, 11, 18, 22)))
-    val lotto = Lotto(5, List(2, 45, 34, 23, 7, 5, 3), winners, None)
-
-    val json =
-      ("lotto" ->
-        ("lotto-id" -> lotto.id) ~
-          ("winning-numbers" -> lotto.winningNumbers) ~
-          ("draw-date" -> lotto.drawDate.map(_.toString)) ~
-          ("winners" ->
-            lotto.winners.map { w =>
-              (("winner-id" -> w.id) ~
-                ("numbers" -> w.numbers))}))
-  }
-
-  def spark_test(): Unit = {
-    val conf = new SparkConf().setMaster("local").setAppName("Test Load Model")
-
-    val sc = new SparkContext(conf)
-
-    val lines = sc.textFile("D:/Big_Data/spark-1.6.1-bin-hadoop2.6/README.md")
-    val pythonLines = lines.filter(line => line.contains("Python"))
-    println("----output----------------------")
-    println(pythonLines.first())
-
-    sc.stop()
-  }
-
-  def redis_test(): Unit = {
-    val redisHost = "192.168.2.106"
-    val redisPort = 6379
+    
+    //链接redis
+    val redisHost = "127.0.0.1"     //redis地址
+    val redisPort = 6379            //redis端口
     val redisClient = new Jedis(redisHost, redisPort)
-//    redisClient.auth(redisPassword)
+//    redisClient.auth("redisPassword")       //验证redis密码，如果需要的话
 
-    var result = redisClient.get("a");
-    println(result)
+    //设置redis缓存
+    val topic_form_redis_key = "phoenixindex_newslink"
+    redisClient.set(topic_form_redis_key, json)
+    println(redisClient.get(topic_form_redis_key))
   }
 
 }
