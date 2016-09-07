@@ -2,9 +2,10 @@ package net.wujunwei.spark.java
 
 import org.apache.spark.{SparkConf, SparkContext}
 import redis.clients.jedis.Jedis
-import org.json4s._
 import org.json4s.JsonDSL._
-import org.json4s.jackson.JsonMethods._
+import org.json4s.native.Json
+import org.json4s.DefaultFormats
+
 
 
 /**
@@ -27,10 +28,25 @@ object SparkTest {
     val myTopics = List(MyTopic(1781, "文具"),MyTopic(1782,"电脑"))
     val myTopicForm = MyTopicForm(myTopics, 2)
 
-    val json = ("topics" -> 1) ~ ("topic_count" -> 3)
+    val json = Map(
+      "topic_form_0" -> Map(
+        "count" -> "2",
+        "topics" -> List(
+          Map("id" -> "1781", "name" -> "wenju") ,
+          Map("id" -> "1781", "name" -> "wenju")
+        )
+      ),
+      "topic_form_1" -> Map(
+        "count" -> 2,
+        "topics" -> List(
+          Map("id" -> "1781", "name" -> "wenju") ,
+          Map("id" -> "1781", "name" -> "wenju")
+        )
+      )
+    )
 
-
-    println(compact(render(json)))
+    println(Json(DefaultFormats).write(json))
+//    println(compact(render(json)))
 
 
   }
