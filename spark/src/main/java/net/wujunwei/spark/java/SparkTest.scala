@@ -1,6 +1,7 @@
 package net.wujunwei.spark.java
 
 import org.apache.spark.{SparkConf, SparkContext}
+import org.datanucleus.store.types.simple.HashMap
 import redis.clients.jedis.Jedis
 import org.json4s.JsonDSL._
 import org.json4s.native.Json
@@ -15,37 +16,46 @@ object SparkTest {
 
   def main(args: Array[String]) {
 
-//    val conf = new SparkConf().setMaster("local").setAppName("Test Load Model")
+    val conf = new SparkConf().setMaster("local").setAppName("mapConvertJsonToRedis")
 //
-//    val sc = new SparkContext(conf)
+    val sc = new SparkContext(conf)
 
-//    val lines = sc.textFile("D:/a.txt")
-//    case calss MyTopic(id: Long, name: Long)
+    val data = sc.textFile("/home/wujunwei/study/a.txt")
 
-    case class MyTopic(id: Long, name: String)
-    case class MyTopicForm(topics: List[MyTopic], topic_count: Int)
+    val tmpData1 = data.map(line => line.split(1.toChar.toString))
 
-    val myTopics = List(MyTopic(1781, "文具"),MyTopic(1782,"电脑"))
-    val myTopicForm = MyTopicForm(myTopics, 2)
+    val topic_form_list = tmpData1.map(line=>line(0)).distinct.collect()
+
+    case class My_Topic(id: String, name: String)
+
+    var jsonMap:Map[String,Any] = Map()
+    topic_form_list.foreach(topic_form => {
+      val tmpTopics = tmpData1.filter(line => line(0) == topic_form).map(
+        line => My_Topic(line(2), line(1))
+      ).collect()
+
+      jsonMap += ("topic_form_" + topic_form ->
+        Map("topics" -> tmpTopics, "topicCount" -> tmpTopics.length))
+    })
 
     val json = Map(
       "topic_form_0" -> Map(
-        "count" -> "2",
         "topics" -> List(
-          Map("id" -> "1781", "name" -> "wenju") ,
-          Map("id" -> "1781", "name" -> "wenju")
-        )
+          Map("id" -> 1781, "name" -> "wenju") ,
+          Map("id" -> 1781, "name" -> "wenju")
+        ),
+        "count" -> 2
       ),
       "topic_form_1" -> Map(
-        "count" -> 2,
         "topics" -> List(
           Map("id" -> "1781", "name" -> "wenju") ,
           Map("id" -> "1781", "name" -> "wenju")
-        )
+        ),
+        "count" -> 2
       )
     )
 
-    println(Json(DefaultFormats).write(json))
+    println(Json(DefaultFormats).write(jsonMap))
 //    println(compact(render(json)))
 
 
