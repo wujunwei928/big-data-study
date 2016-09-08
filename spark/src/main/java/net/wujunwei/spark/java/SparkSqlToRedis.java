@@ -13,7 +13,8 @@ import redis.clients.jedis.JedisPoolConfig;
  */
 public class SparkSqlToRedis {
     public static void main(String[] args) {
-        sparkSqlTest();
+//        sparkSqlTest();
+        System.out.println("Hello");
     }
 
     /**

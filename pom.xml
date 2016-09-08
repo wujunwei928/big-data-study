@@ -16,7 +16,6 @@
     <!--定义相关模块-->
     <modules>
         <module>spark</module>
-        <module>spider</module>
     </modules>
 
 
@@ -33,7 +32,7 @@
         <!--大数据相关-->
         <hadoop.version>2.7.1</hadoop.version>
         <yarn.version>${hadoop.version}</yarn.version>
-        <scala.version>2.10</scala.version>
+        <scala.version>2.11</scala.version>
         <scala.binary.version>2.11</scala.binary.version>
         <spark.version>1.6.1</spark.version>
         <hbase.version>1.0.1.1</hbase.version>
@@ -107,18 +106,6 @@
                 <artifactId>camel-test</artifactId>
                 <version>${camel.version}</version>
                 <scope>test</scope>
-            </dependency>
-
-            <!-- scala -->
-            <dependency>
-                <groupId>org.scala-lang</groupId>
-                <artifactId>scala-library</artifactId>
-                <version>${scala.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.scala-lang.modules</groupId>
-                <artifactId>scala-xml_${scala.binary.version}</artifactId>
-                <version>1.0.4</version>
             </dependency>
 
             <!--spark-->
