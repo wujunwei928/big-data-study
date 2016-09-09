@@ -16,6 +16,13 @@
     <!--定义相关模块-->
     <modules>
         <module>spark</module>
+        <module>hive</module>
+        <module>flume</module>
+        <module>kafka</module>
+        <module>storm</module>
+        <module>zookeeper</module>
+        <module>hbase</module>
+        <module>hdfs</module>
     </modules>
 
 
@@ -32,8 +39,8 @@
         <!--大数据相关-->
         <hadoop.version>2.7.1</hadoop.version>
         <yarn.version>${hadoop.version}</yarn.version>
-        <scala.version>2.11</scala.version>
-        <scala.binary.version>2.11</scala.binary.version>
+        <scala.version>2.10</scala.version>
+        <scala.binary.version>2.10</scala.binary.version>
         <spark.version>1.6.1</spark.version>
         <hbase.version>1.0.1.1</hbase.version>
         <flume.version>1.6.0</flume.version>

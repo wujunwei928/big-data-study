@@ -9,7 +9,7 @@ import org.json4s.DefaultFormats
 
 
 
-/**
+ /*
   * spark读取文件，将文件信息汇总成json，然后存入redis
   *
   * @author Wujunwei
@@ -26,7 +26,7 @@ object SparkTest {
 
     val sc = new SparkContext(conf)
 
-    val data = sc.textFile("/home/wujunwei/study/a.txt")
+    val data = sc.textFile("D:/wjw_test/big-data-study/spark/src/main/resources/topic_form.txt")
 
     val tmpData1 = data.map(line => line.split(1.toChar.toString))
 
