@@ -18,7 +18,7 @@ import org.json4s.DefaultFormats
   * @blog   http://www.wujunwei.net
   *
   */
-object SparkTest {
+object SparkRedisTest {
 
   def main(args: Array[String]) {
 
