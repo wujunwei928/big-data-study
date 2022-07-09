@@ -52,7 +52,7 @@
         <javax.servlet.version>3.1.0</javax.servlet.version>
 
         <!--Sql,Nosql相关-->
-        <mysql.connector.version>5.1.38</mysql.connector.version>
+        <mysql.connector.version>8.0.28</mysql.connector.version>
         <jedis.version>2.8.1</jedis.version>
 
 
