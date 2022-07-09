@@ -64,7 +64,7 @@
         <joda.version>2.9.3</joda.version>
         <jodd.version>3.5.2</jodd.version>
         <json4s.version>3.3.0</json4s.version>
-        <camel.version>2.17.3</camel.version>
+        <camel.version>2.24.0</camel.version>
 
         <!--测试相关-->
         <junit.version>4.12</junit.version>
