@@ -10,6 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>hdfs</artifactId>
+    <name>hdfs</name>
+    <version>1.0.0</version>
+    <description>hdfs practice</description>
+
+    <dependencies>
+    </dependencies>
 
 
 </project>
